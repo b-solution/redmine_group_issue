@@ -7,5 +7,6 @@ Redmine::Plugin.register :redmine_group_issue do
   author_url 'http://example.com/about'
 end
 
+require 'redmine_group_issue/patches/query_patch'
 require 'redmine_group_issue/patches/issue_query_patch'
 require 'redmine_group_issue/patches/queries_helper_patch'

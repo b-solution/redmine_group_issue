@@ -40,7 +40,7 @@ module RedmineGroupIssue
                   group_name = format_object(group)
                 end
                 group_name ||= ""
-                group_count = result_count_by_group ? result_count_by_group[group.count > 1 ? group.map(&:id) : group.map(&:id).first] : nil
+                group_count = result_count_by_group ? result_count_by_group[group.count > 1 ? group : group.first] : nil
                 group_totals = totals_by_group.map {|column, t| total_tag(column, t[group] || 0)}.join(" ").html_safe
               end
             end

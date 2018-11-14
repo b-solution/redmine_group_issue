@@ -15,7 +15,12 @@ module RedmineGroupIssue
       def group_by_column_select_tag_with_group(query)
         options = [[]] + query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}
         if query.is_a? IssueQuery
-          select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')), multiple: true)
+          [
+              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[0])),
+              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[1])),
+              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[2]))
+          ].join('<br/>').html_safe
+
         else
           group_by_column_select_tag_without_group(query)
         end

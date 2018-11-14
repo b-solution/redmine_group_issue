@@ -24,7 +24,8 @@ module RedmineGroupIssue::Patches
         end
 
         def group_by_column
-          groupable_columns.select {|c| c.groupable && c.name.to_s.in?( JSON.parse(group_by || '[]'))}
+          # groupable_columns.select {|c| c.groupable && c.name.to_s.in?( JSON.parse(group_by || '[]'))}
+          JSON.parse(group_by || '[]').map(&:presence).map{|gc|  groupable_columns.detect {|c| c.groupable && c.name.to_s == gc }}.compact
         end
 
         def group_by_statement

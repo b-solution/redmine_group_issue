@@ -37,7 +37,7 @@ module RedmineGroupIssue
                 if group.blank? && group != false
                   group_name = "(#{l(:label_blank_value)})"
                 else
-                  group_name = format_object(group)
+                  group_name = group.is_a?(Array) ? group.map{|g| format_object(g) } : format_object(group)
                 end
                 group_name ||= ""
                 group_count = result_count_by_group ? result_count_by_group[group.count > 1 ? group : group.first] : nil

@@ -16,9 +16,9 @@ module RedmineGroupIssue
         options = [[]] + query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}
         if query.is_a? IssueQuery
           [
-              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[0])),
-              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[1])),
-              select_tag('group_by[]', options_for_select(options, JSON.parse(@query.group_by|| '[]')[2]))
+              select_tag('group_by[]', options_for_select(options, @query.group_by.to_s.scan(/\w+/)[0])),
+              select_tag('group_by[]', options_for_select(options, @query.group_by.to_s.scan(/\w+/)[1])),
+              select_tag('group_by[]', options_for_select(options, @query.group_by.to_s.scan(/\w+/)[2]))
           ].join('<br/>').html_safe
 
         else

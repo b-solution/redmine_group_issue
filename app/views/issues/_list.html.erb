@@ -28,7 +28,7 @@
                         <tr class="group open" data-level="<%= idx %>" >
                           <td colspan="<%= query.inline_columns.size + 1 %>">
                             <span  style="margin-left: <%= idx*20 %>px" class="expander" onclick="toggleRowNGroup(this);">&nbsp;</span>
-                            <span class="name"><%= group_name %></span> <span class="count"><%= group_count %></span>
+                            <span class="name"><%= group_name %></span> <% if idx == (array.count - 1) %> <span class="count"><%= group_count %></span><span class="totals"><%= group_totals %></span> <% end %>
                             <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}",
                                                  "toggleAllRowGroups(this)", :class => 'toggle-all') %>
                           </td>

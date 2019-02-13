@@ -45,8 +45,8 @@ module RedmineGroupIssue
                   group_name = group.is_a?(Array) ? group.map{|g| format_object(g) } : format_object(group)
                 end
                 group_name ||= ""
-                group_count = result_count_by_group ? result_count_by_group[group.count > 1 ? group : group.first] : nil
-                group_totals = totals_by_group.map {|column, t| total_tag(column, t[group] || 0)}.join(" ").html_safe
+                group_count = result_count_by_group ? result_count_by_group[render_filter(query, group)] : nil
+                group_totals = totals_by_group.map {|column, t| total_tag(column, t[render_filter(query, group)] || 0)}.join(" ").html_safe
               end
             end
             yield item, group_name, group_count, group_totals
@@ -56,6 +56,31 @@ module RedmineGroupIssue
           grouped_query_results_without_group(items, query, &block)
         end
 
+      end
+
+      def render_filter(query, groups)
+        output = []
+        query.group_by_column.each_with_index do |object, index|
+          case object.name
+            when :project then output << groups[index]&.name
+            when :tracker then output << groups[index]&.position
+            when :status then output << groups[index]&.position
+            when :priority then output << groups[index]&.position
+            when :category then output << groups[index]&.name
+            when :done_ratio then output << groups[index]
+            when :fixed_version then output << [(groups[index]&.effective_date.nil? ? 1 : 0), groups[index]&.effective_date, groups[index]&.name, groups[index]&.id]
+            when :assignee then output << [groups[index]&.firstname, groups[index]&.lastname, groups[index]&.id ]
+            when :author then output << [groups[index]&.firstname, groups[index]&.lastname, groups[index]&.id ]
+            else
+              if object.is_a? QueryCustomFieldColumn
+                output << groups[index].to_s
+              else
+                output << groups[index]
+              end
+          end
+        end
+        output.flatten!
+        output.size > 1 ? output : output.first
       end
     end
   end

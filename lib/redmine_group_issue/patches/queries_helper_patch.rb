@@ -69,7 +69,7 @@ module RedmineGroupIssue
             when :category then output << groups[index]&.name
             when :done_ratio then output << groups[index]
             when :fixed_version then output << [(groups[index]&.effective_date.nil? ? 1 : 0), groups[index]&.effective_date, groups[index]&.name, groups[index]&.id]
-            when :assignee then output << [groups[index]&.firstname, groups[index]&.lastname, groups[index]&.id ]
+            when :assigned_to then output << [groups[index]&.firstname, groups[index]&.lastname, groups[index]&.id ]
             when :author then output << [groups[index]&.firstname, groups[index]&.lastname, groups[index]&.id ]
             else
               if object.is_a? QueryCustomFieldColumn

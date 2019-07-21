@@ -40,7 +40,7 @@ module RedmineGroupIssue::Patches
         end
 
         def joins_for_order_statement(order_options)
-          joins = [super]
+          joins = [joins_for_order_statement_with_group(order_options)]
 
           if order_options
             if order_options.include?('authors')  || order_options.include?('author')
@@ -52,7 +52,7 @@ module RedmineGroupIssue::Patches
             if order_options.include?('last_journal_user')  # || order_options.include?('category')
               joins << "LEFT OUTER JOIN #{Journal.table_name} ON #{Journal.table_name}.id = (SELECT MAX(#{Journal.table_name}.id) FROM #{Journal.table_name}" +
                   " WHERE #{Journal.table_name}.journalized_type='Issue' AND #{Journal.table_name}.journalized_id=#{Issue.table_name}.id AND #{Journal.visible_notes_condition(User.current, :skip_pre_condition => true)})" +
-                  " LEFT OUTER JOIN #{User.table_name} last_journal_user ON last_journal_user.id = #{Journal.table_name}.user_id";
+                  " LEFT OUTER JOIN #{User.table_name} last_journal_user ON last_journal_user.id = #{Journal.table_name}.user_id"
             end
             if order_options.include?('versions') || order_options.include?('fixed_version')
               joins << "LEFT OUTER JOIN #{Version.table_name} ON #{Version.table_name}.id = #{queried_table_name}.fixed_version_id"
